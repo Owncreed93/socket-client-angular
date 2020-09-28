@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
+import { Usuario } from '../classes/usuario';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ import { Observable } from 'rxjs';
 export class WebsocketService {
 
   public socketStatus = false;
+  public usuario: Usuario;
 
   constructor( private socket: Socket ) {
 
@@ -35,8 +37,8 @@ export class WebsocketService {
 
   }
 
-  // * EMITS ANY KIND OD EVENT
-  emit( evento: string, payload?: any, callback?: () => void ): void {
+  // * EMITS ANY KIND OF EVENT
+  emit( evento: string, payload?: any, callback?: (resp) => void ): void {
 
     console.log('Emitting event', evento);
 
@@ -48,6 +50,19 @@ export class WebsocketService {
   listen( evento: string ): Observable<any> {
 
     return this.socket.fromEvent(evento);
+
+  }
+
+  // * SET UP USER
+  loginWS( nombre: string ): void{
+
+    console.log('Set up user:', nombre);
+
+    this.emit('configurar-usuario', {nombre}, (resp) => { console.log(resp); } );
+
+    // this.socket.emit( 'configurar-usuario', {nombre}, ( resp: string ) => {
+    //   console.log( resp );
+    // });
 
   }
 
