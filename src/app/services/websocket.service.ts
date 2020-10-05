@@ -13,6 +13,7 @@ export class WebsocketService {
 
   constructor( private socket: Socket ) {
 
+    this.cargarStorage();
     this.checkStatus();
 
   }
@@ -54,15 +55,45 @@ export class WebsocketService {
   }
 
   // * SET UP USER
-  loginWS( nombre: string ): void{
+  loginWS( nombre: string ){
 
-    console.log('Set up user:', nombre);
+    return new Promise( ( resolve, reject ) => {
 
-    this.emit('configurar-usuario', {nombre}, (resp) => { console.log(resp); } );
+      this.emit('configurar-usuario', {nombre}, (resp) => {
+
+        this.usuario = new Usuario( nombre );
+
+        this.guardarStorage();
+
+        console.log(resp);
+
+      });
+
+      resolve(  );
+
+    });
 
     // this.socket.emit( 'configurar-usuario', {nombre}, ( resp: string ) => {
     //   console.log( resp );
     // });
+
+  }
+
+  guardarStorage(): void {
+
+    localStorage.setItem('usuario', JSON.stringify( this.usuario ));
+
+  }
+
+  cargarStorage(): void {
+
+    let usuario = localStorage.getItem('usuario')
+
+    if ( usuario ) {
+
+      this.usuario = JSON.parse( usuario );
+
+    }
 
   }
 
