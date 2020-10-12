@@ -32,4 +32,10 @@ export class ChatService {
 
   }
 
+  getUsuariosActivos(): Observable<any> {
+
+    return this.wsService.listen( 'usuarios-activos' );
+
+  }
+
 }
