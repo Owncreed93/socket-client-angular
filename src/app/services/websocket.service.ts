@@ -26,6 +26,8 @@ export class WebsocketService {
 
       this.socketStatus = true;
 
+      this.cargarStorage();
+
     });
 
     this.socket.on('disconnect', () => {
